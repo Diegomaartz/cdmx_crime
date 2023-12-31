@@ -1,0 +1,46 @@
+{% extends 'base.html' %} {% block content %}
+
+<div class="card">
+  <div class="card-header">
+    <strong>
+      {{ reported_crime.user_report }}
+      <br />
+      {{ reported_crime.id }}
+    </strong>
+  </div>
+  <div class="card-body">
+    <p class="card-text">
+      <strong>Delito: </strong>{{ reported_crime.delito }}
+    </p>
+
+    <p class="card-text">
+      <strong>Categoria: </strong>{{ reported_crime.categoria }}
+    </p>
+    <p class="card-text">
+      <strong>Alcaldia: </strong>{{ reported_crime.alcaldia_hecho }}
+    </p>
+    <p class="card-text">
+      <strong>Fecha: </strong>{{ reported_crime.fecha_hecho }}
+    </p>
+    <p class="card-text">
+      <strong>Hora: </strong>{{ reported_crime.hora_hecho }}
+    </p>
+  </div>
+</div>
+
+<br /><br />
+
+<a
+  href="{% url 'delete_reported_crime' reported_crime.id %}"
+  class="btn btn-danger"
+  >Eliminar Reporte</a
+>
+
+<a
+  href="{% url 'update_reported_crime' reported_crime.id %}"
+  class="btn btn-warning"
+  >Actualizar Reporte</a
+>
+<a href="{% url 'profile' %}" class="btn btn-secondary">Regresar</a>
+
+{% endblock %}

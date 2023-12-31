@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="col-md-6 offset-md-3">
+<h1>Actualizar reporte de crimen:</h1>
+<br/>
+
+<form method="POST">
+	{% csrf_token %}
+
+	{{ form.as_p }}
+
+<br/>
+  <button type="submit" class="btn btn-danger">Actualizar</button>
+  <a href="{% url 'profile'%}" class="btn btn-secondary">Cancelar</a>
+
+
+</form>
+
+
+</div>
+
+{% endblock %}

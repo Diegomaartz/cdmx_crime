@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% comment %} {% load crispy_forms_tags %} {% endcomment %}
+
+{% block content %}
+<div class="container mt-3">
+  <div class="row">
+      <div class="col-md-5 offset-md-7">
+          <div class="card">
+              <div class="row g-0">
+                  <div class="col-sm-4" style="background: #868e96; text-align: center; padding: 10px; display: flex; align-items: center;">
+                      <img class="card-img-top account-img mb-3" src="{{user.profile.image.url}}" alt="User Profile Image" style="max-width: 100%; height: auto;">
+                  </div>          
+                  <div class="col-sm-7 d-flex align-items-center">
+                      <div class="card-body text-center">
+                          <h5 class="card-title">{{user.username}}</h5>
+                          <p class="text-secondary">{{user.email}}</p>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+
+
+      <div class="col-md-12">
+        <h1 class="text-light">Crimenes reportados:</h1>
+        <table class="display" id="tabla_crimes">
+          <thead>
+            <tr>
+              <th scope="col"># ID</th>
+              <th scope="col">Fecha / Año</th>
+              <th scope="col">Delito</th>
+              <th scope="col">Categoria</th>
+              <th scope="col">Alcaldia</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for crime in user_reported_crimes %}
+            <tr>
+              <th scope="row"> <a href="{% url "see_reported_crime" crime.id %}">{{crime.id}}</a></th>
+              <td>{{ crime.fecha_hecho }}</td>
+              <td>{{ crime.delito }}</td>
+              <td>{{ crime.categoria }}</td>
+              <td>{{ crime.alcaldia_hecho }}</td>
+              {% comment %} <td><a href="{% url 'update_reported_crime' crime.id %}" role="button"> Corregir Reporte </a> </td> {% endcomment %}
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    $(document).ready(function () {
+      $("#tabla_crimes").DataTable({
+        language: {
+          decimal: "",
+          emptyTable: "No hay información disponible.",
+          info: "Mostrando _END_ de _TOTAL_ crímenes reportados.",
+          infoEmpty: "No hay información disponible.",
+          infoFiltered: "(Encontrado de un total de _MAX_ crímenes.)",
+          infoPostFix: "",
+          thousands: ",",
+          lengthMenu: "Mostrar _MENU_ crímenes.",
+          loadingRecords: "Cargando ...",
+          processing: "",
+          search: "Buscar:",
+          zeroRecords: "No se encontraron coincidencias.",
+          paginate: {
+            first: "Primera",
+            last: "Última",
+            next: "Siguiente",
+            previous: "Anterior",
+          },
+          aria: {
+            sortAscending: ": Filtro ascendente.",
+            sortDescending: ": Filtro descendente.",
+          },
+        },
+      });
+    });
+  </script>
+
+{% endblock content %}

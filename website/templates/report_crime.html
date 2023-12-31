@@ -1,0 +1,25 @@
+{% extends 'base.html' %} 
+{% block content %}
+
+<style>
+  .custom-form label,
+  .custom-form select {
+    color: white;
+  }
+  .custom-form textarea,
+  .custom-form input {
+    color: black;
+  }
+</style>
+
+<div class="col-md-6 offset-md-3">
+  <h1>Reportar Crimen</h1>
+  <br />
+  <form method="post" action="{% url 'report_crime' %}">
+    {% csrf_token %}
+     {{ form.as_p }}
+    <input type="submit" class="btn btn-danger" value="Reportar Crimen" />
+  </form>
+</div>
+
+{% endblock %}

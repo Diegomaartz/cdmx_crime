@@ -1,0 +1,96 @@
+{% extends 'base.html' %} {%block content%} {% if user.is_authenticated %}
+
+<style>
+  .dataTables_length select{
+    background-color: red;
+    color: blue;
+  }
+</style>
+
+<script>
+  $(document).ready(function () {
+    $("#tabla_crimes").DataTable({
+      language: {
+        decimal: "",
+        emptyTable: "No hay información disponible.",
+        info: "Mostrando _END_ de _TOTAL_ crímenes reportados.",
+        infoEmpty: "No hay información disponible.",
+        infoFiltered: "(Encontrado de un total de _MAX_ crímenes.)",
+        infoPostFix: "",
+        thousands: ",",
+        lengthMenu: "Mostrar _MENU_ crímenes.",
+        loadingRecords: "Cargando ...",
+        processing: "",
+        search: "Buscar:",
+        zeroRecords: "No se encontraron coincidencias.",
+        paginate: {
+          first: "Primera",
+          last: "Última",
+          next: "Siguiente",
+          previous: "Anterior",
+        },
+        aria: {
+          sortAscending: ": Filtro ascendente.",
+          sortDescending: ": Filtro descendente.",
+        },
+      },
+    });
+  });
+</script>
+
+<h1 class="text-light">Crime CDMX Information</h1>
+<table class="display" id="tabla_crimes">
+  <thead>
+    <tr>
+      <th scope="col"># ID</th>
+      <th scope="col">Fecha / Año</th>
+      <th scope="col">Delito</th>
+      <th scope="col">Categoria</th>
+      <th scope="col">Alcaldia</th>
+      <th scope="col">Reportado por:</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for crime in crimes %}
+    <tr>
+      <th scope="row">{{crime.id}}</th>
+      <td>{{ crime.fecha_hecho }}</td>
+      <td>{{ crime.delito }}</td>
+      <td>{{ crime.categoria }}</td>
+      <td>{{ crime.alcaldia_hecho }}</td>
+      <td>{{ crime.user_report }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{%else%}
+
+<div class="col-md-6 offset-md-3">
+  <h1>Login</h1>
+
+  <form method="post" action="{% url 'home'%}">
+    {%csrf_token%}
+    <div class="mb-3">
+      <input
+        type="text"
+        class="form-control"
+        name="username"
+        ,
+        placeholder="Username"
+      />
+    </div>
+    <div class="mb-3">
+      <input
+        type="password"
+        class="form-control"
+        name="password"
+        ,
+        placeholder="Password"
+      />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Login</button>
+  </form>
+</div>
+
+{%endif%} {%endblock%}

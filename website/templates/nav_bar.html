@@ -1,0 +1,101 @@
+<style>
+  .custom-navbar {
+    background: linear-gradient(to right, #D31414, #000000);
+    color: white; 
+  }
+
+  .custom-icon {
+    color: #AFA5A5; 
+  }
+
+  .custom-icon:hover {
+    color: #ffffff; 
+  }
+
+  .nav-link {
+    display: flex;
+    align-items: center;
+    padding: 8px;
+  }
+
+  .nav-link svg {
+    margin-right: 8px; /* Adjust the margin as needed */
+    margin-top: 2px; /* Adjust the margin as needed */
+  }
+
+  .center-links {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-grow: 1; /* Grow to fill the available space */
+  }
+
+</style>
+
+<nav class="navbar navbar-expand-lg custom-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="{% url 'home_news' %}">
+      {% load static %}
+      <img src="{% static 'logo2.svg' %}" alt="CRIMECDMXLOGO" width="80" height="64">
+    </a>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      {% if user.is_authenticated %}
+
+      <div class="center-links">
+
+        <ul class="nav justify-content-center">
+
+
+          <li class="nav-item">
+            <a href="{% url 'all_crimes' %}" role="button" class="nav-link custom-icon" aria-expanded="false">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 12" width="12" height="12"><path d="M4.855.708c.5-.896 1.79-.896 2.29 0l4.675 8.351a1.312 1.312 0 0 1-1.146 1.954H1.33A1.313 1.313 0 0 1 .183 9.058ZM7 7V3H5v4Zm-1 3a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z" fill="#ffffff"></path></svg>
+              Recientes
+            </a>        
+          </li>
+{% comment %} 
+          <li class="nav-item">
+            <a href="{% url 'home_news' %}" role="button" class="nav-link custom-icon" aria-expanded="false">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 12" width="12" height="12"><path d="M4.855.708c.5-.896 1.79-.896 2.29 0l4.675 8.351a1.312 1.312 0 0 1-1.146 1.954H1.33A1.313 1.313 0 0 1 .183 9.058ZM7 7V3H5v4Zm-1 3a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z" fill="#ffffff"></path></svg>
+              Recientes
+            </a>        
+          </li> {% endcomment %}
+
+          <li class="nav-item">
+            <a class="nav-link custom-icon" href="{%url 'map_crimes'%}">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16"><path d="m12.596 11.596-3.535 3.536a1.5 1.5 0 0 1-2.122 0l-3.535-3.536a6.5 6.5 0 1 1 9.192-9.193 6.5 6.5 0 0 1 0 9.193Zm-1.06-8.132v-.001a5 5 0 1 0-7.072 7.072L8 14.07l3.536-3.534a5 5 0 0 0 0-7.072ZM8 9a2 2 0 1 1-.001-3.999A2 2 0 0 1 8 9Z" fill="#ffffff"></path></svg>
+              Mapa
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link custom-icon" href="{%url 'report_crime'%}">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16"><path fill="#ffffff" d="M3.25 9a.75.75 0 0 1 .75.75c0 2.142.456 3.828.733 4.653a.122.122 0 0 0 .05.064.212.212 0 0 0 .117.033h1.31c.085 0 .18-.042.258-.152a.45.45 0 0 0 .075-.366A16.743 16.743 0 0 1 6 9.75a.75.75 0 0 1 1.5 0c0 1.588.25 2.926.494 3.85.293 1.113-.504 2.4-1.783 2.4H4.9c-.686 0-1.35-.41-1.589-1.12A16.4 16.4 0 0 1 2.5 9.75.75.75 0 0 1 3.25 9Z"></path><path d="M0 6a4 4 0 0 1 4-4h2.75a.75.75 0 0 1 .75.75v6.5a.75.75 0 0 1-.75.75H4a4 4 0 0 1-4-4Zm4-2.5a2.5 2.5 0 1 0 0 5h2v-5Z" fill="#ffffff"></path><path d="M15.59.082A.75.75 0 0 1 16 .75v10.5a.75.75 0 0 1-1.189.608l-.002-.001h.001l-.014-.01a5.775 5.775 0 0 0-.422-.25 10.63 10.63 0 0 0-1.469-.64C11.576 10.484 9.536 10 6.75 10a.75.75 0 0 1 0-1.5c2.964 0 5.174.516 6.658 1.043.423.151.787.302 1.092.443V2.014c-.305.14-.669.292-1.092.443C11.924 2.984 9.713 3.5 6.75 3.5a.75.75 0 0 1 0-1.5c2.786 0 4.826-.484 6.155-.957.665-.236 1.154-.47 1.47-.64.144-.077.284-.161.421-.25l.014-.01a.75.75 0 0 1 .78-.061Z" fill="#ffffff"></path></svg>
+            Reportar</a>
+          </li>
+        </ul>
+      </div>
+
+      <ul class="navbar-nav">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="bi bi-person-circle custom-icon fs-2"></i>
+          </a>            
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="{% url 'profile' %}">{{user.username}}</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="{% url 'logout' %}">Cerrar Sesión</a></li>
+          </ul>
+        </li>
+      </ul>
+
+      {% else %}
+        <div>
+          <a href="{% url 'register' %}" role="button" class="btn btn-danger btn-lg position-relative">Sign in</a>
+          <a href="{% url 'home' %}" role="button" class="btn btn-dark btn-lg position-relative">Log in</a>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</nav>
+

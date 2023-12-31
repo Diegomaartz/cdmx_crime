@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{%block content%}
+
+<style>
+    .card {
+    color: white;
+    background: linear-gradient(to left, #D31414, #000000);
+   }
+  
+ </style>
+ 
+ 
+
+
+{% if user.is_authenticated %}
+
+<h1>Noticias en México:</h1>
+
+<br>
+<br>
+
+
+{%for title, desc, image_news, urlToNews in news_crimes%}
+
+<div class="card text-bg-custome mb-3" style="width: 100%;">
+    <img src="{{image_news}}" class="card-img-top" alt="">
+    <div class="card-body">
+      <h5 class="card-title">{{title}}</h5>
+      <p class="card-text">{{desc}}</p>
+      <a href="{{urlToNews}}" class="btn btn-dark">Mirar nota completa</a>
+    </div>
+</div> 
+
+  <br>
+  <br>
+  <br>
+
+{% endfor %}
+
+{%else%}
+
+<div class="col-md-6 offset-md-3">
+
+    <h1>Login</h1>
+
+    <form method='post' action="{% url 'home'%}">
+        {%csrf_token%}
+        <div class="mb-3">
+            <input type="text" class="form-control" name="username", placeholder="Username">
+        </div>
+        <div class="mb-3">
+            <input type="password" class="form-control" name= "password", placeholder="Password">
+        </div>
+
+        <button type="submit" class="btn btn-primary">Login</button>
+    </form>
+</div>
+
+{%endif%}
+
+{%endblock%}
