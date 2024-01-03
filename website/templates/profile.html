@@ -6,15 +6,19 @@
 <div class="container mt-3">
   <div class="row">
       <div class="col-md-5 offset-md-7">
-          <div class="card">
-              <div class="row g-0">
+        <div class="card text-white bg-dark border-danger">
+          <div class="row g-0">
                   <div class="col-sm-4" style="background: #868e96; text-align: center; padding: 10px; display: flex; align-items: center;">
                       <img class="card-img-top account-img mb-3" src="{{user.profile.image.url}}" alt="User Profile Image" style="max-width: 100%; height: auto;">
                   </div>          
                   <div class="col-sm-7 d-flex align-items-center">
                       <div class="card-body text-center">
-                          <h5 class="card-title">{{user.username}}</h5>
+                          <div class="card-header border-light">
+                          <h5 class="card-title ">{{user.username}}</h5>
+                          </div>
+                          <br>
                           <p class="text-secondary">{{user.email}}</p>
+
                       </div>
                   </div>
               </div>
