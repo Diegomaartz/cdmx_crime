@@ -9,6 +9,7 @@ urlpatterns = [
     path('register/', views.register_user, name="register"),
     path('profile/', views.profile, name="profile"),
     path('all_crimes/', views.crime_cdmx, name="all_crimes"),
+    path('map_specific_crime/<int:pk>', views.map_specific_crime, name="map_specific_crime"),
     path('map_crimes/', views.map_crimes, name="map_crimes"),
     path('report_crime/', views.report_crime, name="report_crime"),
     path('update_reported_crime/<int:pk>', views.update_reported_crime, name="update_reported_crime"),
