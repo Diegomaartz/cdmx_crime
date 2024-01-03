@@ -20,19 +20,19 @@ class SignUpForm(UserCreationForm):
 		super(SignUpForm, self).__init__(*args, **kwargs)
 
 		self.fields['username'].widget.attrs['class'] = 'form-control'
-		self.fields['username'].widget.attrs['placeholder'] = 'User Name'
+		self.fields['username'].widget.attrs['placeholder'] = 'Nombre de Usuario'
 		self.fields['username'].label = ''
-		self.fields['username'].help_text = '<span class="form-text text-light"><small>Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.</small></span>'
+		self.fields['username'].help_text = '<span class="form-text text-light"><small>Requerida. 150 caracteres o menos. Solo letras, números o @/./+/-/_ .</small></span>'
 
 		self.fields['password1'].widget.attrs['class'] = 'form-control'
-		self.fields['password1'].widget.attrs['placeholder'] = 'Password'
+		self.fields['password1'].widget.attrs['placeholder'] = 'Contraseña'
 		self.fields['password1'].label = ''
-		self.fields['password1'].help_text = '<ul class="form-text text-light small"><li>Your password can\'t be too similar to your other personal information.</li><li>Your password must contain at least 8 characters.</li><li>Your password can\'t be a commonly used password.</li><li>Your password can\'t be entirely numeric.</li></ul>'
+		self.fields['password1'].help_text = '<ul class="form-text text-light small"><li> Tu contraseña no puede ser similar a tu nombre de usuario.</li><li> Tu contraseña debe contener al menos 8 caracteres.</li><li> Tu contraseña no puede ser comúmente usada. </li><li> Tu contraseña no puede ser solo numérica.</li></ul>'
 
 		self.fields['password2'].widget.attrs['class'] = 'form-control'
-		self.fields['password2'].widget.attrs['placeholder'] = 'Confirm Password'
+		self.fields['password2'].widget.attrs['placeholder'] = 'Confirma tu contraseña.'
 		self.fields['password2'].label = ''
-		self.fields['password2'].help_text = '<span class="form-text text-light"><small>Enter the same password as before, for verification.</small></span>'	
+		self.fields['password2'].help_text = '<span class="form-text text-light"><small> Confirma tu contraseña. </small></span>'	
 
 class AddReportForm(forms.ModelForm):
 	user_report = forms.CharField(required=True,disabled=True, widget=forms.TextInput(attrs={"class": "form-control"}), label="Usuario:")
@@ -87,7 +87,7 @@ class AddReportForm(forms.ModelForm):
 	]
 
 	alcaldia_hecho = forms.ChoiceField(choices=alcaldias, required=True, widget=forms.Select(attrs={"class": "form-control"}), label="Alcaldía")
-	direccion = forms.CharField(required=True, widget=forms.TextInput(attrs={"placeholder": "Dirección", "class": "form-control", "id": "direccion"}), label="Dirección")
+	direccion = forms.CharField(required=True, widget=forms.TextInput(attrs={"placeholder": "Dirección", "class": "form-control", "id": "direccion"}), label="Dirección del altercado")
 
 	class Meta:
 		model = crimeData
