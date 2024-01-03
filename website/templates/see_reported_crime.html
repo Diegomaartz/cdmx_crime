@@ -1,11 +1,11 @@
 {% extends 'base.html' %} {% block content %}
 
-<div class="card">
-  <div class="card-header">
+<div class="card text-white bg-dark border-danger">
+  <div class="card-header border-light">
     <strong>
-      {{ reported_crime.user_report }}
+      <h2>{{ reported_crime.user_report }}</h2>
       <br />
-      {{ reported_crime.id }}
+      <strong>ID Reporte: </strong>{{ reported_crime.id }}
     </strong>
   </div>
   <div class="card-body">
@@ -24,6 +24,9 @@
     </p>
     <p class="card-text">
       <strong>Hora: </strong>{{ reported_crime.hora_hecho }}
+    </p>
+    <p class="card-text">
+      <strong>Direccion: </strong>{{ reported_crime.direccion }}
     </p>
   </div>
 </div>
