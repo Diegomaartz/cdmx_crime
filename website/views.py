@@ -139,7 +139,7 @@ def map_crimes(request):
 
 def news_api(request):
     if request.user.is_authenticated:
-        url_top_mx_headlines = "https://newsapi.org/v2/everything?q=+crimen+mexico&from=2023-12-13&to=2023-12-22&sortBy=popularity&apiKey=4940218b125845968afb458c5c9d2713"
+        url_top_mx_headlines = "https://newsapi.org/v2/everything?q=mexico&from=2023-12-20&to=2024-01-01&sortBy=popularity&apiKey=4940218b125845968afb458c5c9d2713"
         news_crimes = requests.get(url_top_mx_headlines).json()
         
         article = news_crimes['articles']
@@ -224,3 +224,66 @@ def see_reported_crime(request, pk):
         messages.success(request, "Debes Iniciar Sesion!")
         return redirect('home_news')      
     
+    
+    
+# def profile(request):
+#     if request.user.is_authenticated:
+#         username = request.user.username
+#         user_reported_crimes = crimeData.objects.filter(user_report=username).values()
+#         return render(request, 'profile.html', {'user_reported_crimes': user_reported_crimes})
+#     else:
+#         messages.success(request, "Debes Iniciar Sesion!")
+#         return redirect('home_news')
+
+def map_specific_crime(request, pk):
+    if request.user.is_authenticated:
+        specific_crime = crimeData.objects.get(id=pk)
+        crimes = crimeData.objects.all()
+
+        print(crimes)
+
+        crime_data_list = [
+            {'latitud': crimespot.latitud.replace(',', '.'),   #0
+            'longitud': crimespot.longitud.replace(',', '.'),  #1
+            'delito': crimespot.delito,                        #2
+            'alcaldia': crimespot.alcaldia_hecho,              #3
+            'fecha': crimespot.fecha_hecho,                    #4
+            'user_report': crimespot.user_report,              #5
+            'direccion': crimespot.direccion                   #6
+            }   
+            for crimespot in crimes
+        ] 
+        
+        data = [(crime['latitud'], crime['longitud'],crime['delito'], crime['alcaldia'], crime['fecha'], crime['user_report'], crime['direccion']) for crime in crime_data_list]
+
+        callback = """ \
+        function (row, element){
+            var icon, marker;
+
+            icon = L.AwesomeMarkers.icon({
+                icon: "map-marker", markerColor: "red"
+            });
+            marker = L.marker(new L.LatLng(row[0], row[1]));
+            marker.setIcon(icon);
+
+            var popupContent = "<p><b>Reportado por: </b> @" +row[5] + "</p>" +
+                            "<p><b>Delito: </b>" + row[2] + "</p>" +
+                            "<p><b>Alcaldía: </b>" + row[3] + "</p>" +
+                            "<p><b>Fecha: </b>" + row[4] + "</p>" +
+                            "<p><b>Direccion: </b>" + row[6] + "</p>" +
+                            "<p><b>Location: </b>" + row[0] + " / " + row[1] + "</p>";
+            marker.bindPopup(popupContent);
+
+            return marker;
+        };
+        """
+
+        mp = folium.Map(location=[specific_crime.latitud.replace(',', '.'), specific_crime.longitud.replace(',', '.')], zoom_start=55)
+
+        FastMarkerCluster(data=data, callback=callback).add_to(mp)
+
+        context = {'map': mp._repr_html_()}
+        return render(request, 'map_specific_crime.html', context)
+    else:
+        messages.success(request, "Debes Iniciar Sesion!")
+        return redirect('home_news')
