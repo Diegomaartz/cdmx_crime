@@ -53,7 +53,7 @@
   <tbody>
     {% for crime in crimes %}
     <tr>
-      <th scope="row">{{crime.id}}</th>
+      <th scope="row"><a href={% url "map_specific_crime" crime.id%}>{{crime.id}}<a/></th>
       <td>{{ crime.fecha_hecho }}</td>
       <td>{{ crime.delito }}</td>
       <td>{{ crime.categoria }}</td>
