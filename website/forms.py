@@ -92,3 +92,10 @@ class AddReportForm(forms.ModelForm):
 	class Meta:
 		model = crimeData
 		exclude = ('anio_hecho', 'latitud', 'longitud')
+
+
+class ProfilePicForm(forms.ModelForm):
+    profile_image = forms.ImageField(label="Foto de Perfil")
+    class Meta:
+        model = Profile
+        fields = ('profile_image',)

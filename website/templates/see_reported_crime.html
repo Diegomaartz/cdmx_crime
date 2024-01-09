@@ -44,6 +44,11 @@
   class="btn btn-warning"
   >Actualizar Reporte</a
 >
+
+<a  href="{% url 'generate_pdf_specific_report' reported_crime.id %}"  class="btn btn-success"  > PDF</a>
+<a  href="{% url 'send_mail_ejemplo'%}"  class="btn btn-success"  > EMAIL</a>
+{% comment %} <a  href="{% url 'export_pdf' reported_crime.id %}"  class="btn btn-success"  > PDF2</a> {% endcomment %}
+
 <a href="{% url 'profile' %}" class="btn btn-secondary">Regresar</a>
 
 {% endblock %}

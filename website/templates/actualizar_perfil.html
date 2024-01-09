@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<style>
+   .custom-form label, .custom-form select{
+    color: white;
+  }
+  .custom-form textarea, .custom-form input {
+    color: black;
+  }
+</style>
+
+
+<div class="col-md-6 offset-md-3">
+  <h1>Actualizar Datos</h1>
+  <br/>
+
+  <form method="POST" action="" class="custom-form" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    {{user_form.as_p}}
+    <br>
+    {{profile_form.as_p}}
+    <br/>
+    <button type="submit" class="btn btn-danger">Actualizar</button>
+    <a href="{%url 'home'%}" class="btn btn-secondary text-white">Atras</a>
+  </form>
+</div>
+
+{% endblock %}

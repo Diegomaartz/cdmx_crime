@@ -3,6 +3,10 @@
 {%block content%}
 
 {% if user.is_authenticated %}
+
+<h1 class="text-light">Mapa de incidencias delictivas en la Ciudad de México </h1>
+
+<br>
 {{map|safe}}
 {% endif %}
 

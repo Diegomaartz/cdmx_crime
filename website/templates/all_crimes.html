@@ -38,7 +38,8 @@
   });
 </script>
 
-<h1 class="text-light">Crime CDMX Information</h1>
+<h1 class="text-light">Crímenes Reportados en la Ciudad de México </h1>
+<br>
 <table class="display" id="tabla_crimes">
   <thead>
     <tr>
@@ -53,7 +54,7 @@
   <tbody>
     {% for crime in crimes %}
     <tr>
-      <th scope="row"><a href={% url "map_specific_crime" crime.id%}>{{crime.id}}<a/></th>
+      <th scope="row"><a href={% url "map_specific_crime" crime.id%} class="text-white">{{crime.id}}<a/></th>
       <td>{{ crime.fecha_hecho }}</td>
       <td>{{ crime.delito }}</td>
       <td>{{ crime.categoria }}</td>

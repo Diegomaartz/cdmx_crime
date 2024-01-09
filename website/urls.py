@@ -15,7 +15,13 @@ urlpatterns = [
     path('update_reported_crime/<int:pk>', views.update_reported_crime, name="update_reported_crime"),
     path('delete_reported_crime/<int:pk>', views.delete_reported_crime, name="delete_reported_crime"),
     path('see_reported_crime/<int:pk>', views.see_reported_crime, name="see_reported_crime"),
+    # path('actualizar_perfil/', views.update_user, name="update_user"),
 
+    path('generate_pdf_specific_report/<int:pk>', views.generate_pdf_specific_report, name="generate_pdf_specific_report"),
+    path('send_mail_ejemplo/', views.send_mail_ejemplo, name="send_mail_ejemplo"),
+    
+    
+    # path('export_pdf/<int:pk>', views.export_pdf, name="export_pdf" ),
 
     # path('user_reports/', views.user_reports, name="user_reports"),
     # path('delete_report_crime/<int:pk>', views.delete_report_crime, name="delete_report_crime"),

@@ -3,9 +3,11 @@ from folium.plugins import FastMarkerCluster
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
-from .forms import SignUpForm, AddReportForm
-from .models import crimeData
+from .forms import SignUpForm, AddReportForm, ProfilePicForm
+from .models import crimeData, Profile
 from django.core.paginator import Paginator
+from django.contrib.auth.models import User
+
 
 from django.http import JsonResponse
 
@@ -14,7 +16,18 @@ import googlemaps
 import json
 from django.conf import settings
 
-# import leafmap
+from django.http import FileResponse
+import io
+from reportlab.pdfgen import canvas
+from reportlab.lib.units import cm
+from reportlab.lib.pagesizes import letter
+
+from django.shortcuts import render
+from django.http import HttpResponse
+from django.template.loader import render_to_string
+
+
+from django.core.mail import send_mail, EmailMessage
 
 def home(request):
         if request.method == 'POST':
@@ -287,3 +300,83 @@ def map_specific_crime(request, pk):
     else:
         messages.success(request, "Debes Iniciar Sesion!")
         return redirect('home_news')
+
+
+def update_user(request):
+    if request.user.is_authenticated:
+        current_user = User.objects.get(id=request.user.id)
+        profile_user = Profile.objects.get(user__id=request.user.id)
+               
+        user_form = SignUpForm(request.POST or None, request.FILES or None, instance=current_user)
+        profile_form = ProfilePicForm(request.POST or None, request.FILES or None, instance=profile_user)
+        
+        if user_form.is_valid() and profile_form.is_valid():
+            user_form.save()
+            profile_form.save()
+            login(request, current_user)
+            messages.success(request, "Tu perfil ha sido actualizado!")
+            return redirect('home_news')
+        return render(request, "actualizar_perfil.html", {'user_form' : user_form, 'profile_form' : profile_form})
+    else:
+        messages.success(request, "Debes Iniciar Sesion!")
+        return redirect('home')
+    
+#Falta darle diseño al pedeefe
+def generate_pdf_specific_report(request, pk):
+    if request.user.is_authenticated:
+        specific_crime = crimeData.objects.get(id=pk)
+   
+        buf = io.BytesIO()
+        c = canvas.Canvas(buf, pagesize=letter, bottomup=0)
+
+        c.translate(cm, cm)
+        c.setFont("Helvetica", 14)
+        c.setStrokeColorRGB(1, 0, 0)  # Cambia el color de las líneas rectas a rojo
+        c.setFillColorRGB(0, 0, 0)  # Color de la fuente
+
+        # c.drawImage('website/static/logo.png', cm, cm)
+
+        # Coloca el logo_b en la esquina superior derecha con una dimensión de 150x150 pixeles
+        c.drawImage('website/static/logo_b.jpg', 6.3 * cm, 8.3 * cm, width=150, height=150)
+
+        c.drawString(0, cm, "Ajajsjsj vete alv oscar ya jala este pedo XDDD")
+        c.drawString(0, 0, "No mames no ce que estoy haciendo vlt vltv vtlv")
+        c.drawString(0, 5 * cm, f'{specific_crime.direccion}')
+        c.setFillColorRGB(0, 0, 0)  # Color de la fuente
+        c.line(0, 2 * cm, 19 * cm, 2 * cm)
+        c.line(0, 22 * cm, 19 * cm, 22 * cm)
+        c.drawString(5.6 * cm, 9.5 * cm, 'Bill No :# 1234')
+        
+        from datetime import date
+        dt = date.today().strftime('%d-%b-%Y')
+        c.drawString(5.6 * cm, 9.3 * cm, dt)
+        c.setFont("Helvetica", 8)
+        c.drawString(3 * cm, 9.6 * cm, 'Tax No :# ABC1234')
+        c.setFillColorRGB(1, 0, 0)  # Color de la fuente
+        c.drawString(0, -0.5 * cm, u"\u00A9" + " plus2net.com")
+        c.rotate(45)  # Rotar 45 grados
+        c.setFillColorCMYK(0, 0, 0, 0.08)  # Color de la fuente CYAN, MAGENTA, YELLOW y BLACK
+        c.setFont("Helvetica", 100)  # Estilo y tamaño de la fuente
+        c.drawString(2 * cm, 1 * cm, "CDMX-CRIME-OFFICIAL-REPORT")  # Texto escrito
+        c.rotate(-45)  # Restaurar la rotación 
+            
+        c.setFillColorRGB(0, 0, 1)
+        c.setFont("Helvetica", 16)
+        c.drawString(2 * cm, 4 * cm, 'This is my product')
+        c.showPage()
+        c.save()
+        
+        buf.seek(0)
+        
+        return FileResponse(buf, as_attachment=True, filename=f'CRIMEN-REPORTADO-{pk}.pdf')
+
+
+
+def send_mail_ejemplo(request):
+    subject = "No responder yeah prueba "
+    message = "PRueba"
+    from_email = settings.EMAIL_HOST_USER
+    receptor = ["pohege8453@roborena.com"]
+    send_mail(subject, message, from_email, receptor)
+    
+    

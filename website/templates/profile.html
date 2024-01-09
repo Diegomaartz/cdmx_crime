@@ -15,9 +15,11 @@
                       <div class="card-body text-center">
                           <div class="card-header border-light">
                           <h5 class="card-title ">{{user.username}}</h5>
+                          
                           </div>
                           <br>
                           <p class="text-secondary">{{user.email}}</p>
+                          {% comment %} <p class="text-secondary"><a href="{% url "update_user" %}">Actualizar Perfil</a></p> {% endcomment %}
 
                       </div>
                   </div>

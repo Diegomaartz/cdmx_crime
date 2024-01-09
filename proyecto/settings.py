@@ -147,3 +147,6 @@ REST_FRAMEWORK = {
 }
 
 GOOGLE_API_KEY = 'AIzaSyB1o8tEeqHFhM7o8BtumM-cnqIwt5MvAuc'
+
+
+EMAIL_HOST_USER = 'pohege8453@roborena.com'
