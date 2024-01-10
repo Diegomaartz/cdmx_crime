@@ -32,12 +32,9 @@
 </div>
 
 <br /><br />
-
-<a
-  href="{% url 'delete_reported_crime' reported_crime.id %}"
+<a  href="{% url 'delete_reported_crime' reported_crime.id %}"
   class="btn btn-danger"
-  >Eliminar Reporte</a
->
+  >Eliminar Reporte</a>
 
 <a  href="{% url 'update_reported_crime' reported_crime.id %}"  class="btn btn-warning"  >Actualizar Reporte</a>
 
@@ -45,6 +42,6 @@
 
 
 <a href="{% url 'profile' %}" class="btn btn-secondary">Regresar</a>
-<a href="{% url 'mail_Sender' %}" class="btn btn-secondary">MAIL</a>
+{% comment %} <a href="{% url 'mail_Sender' %}" class="btn btn-secondary">MAIL</a> {% endcomment %}
 
 {% endblock %}

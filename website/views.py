@@ -69,7 +69,10 @@ def register_user(request):
             #Authenticate and login
             username = form.cleaned_data['username']
             password = form.cleaned_data['password1']
+            email = form.cleaned_data['email']
+            
             user = authenticate(username=username, password=password)
+            mail_sender_registro_user(username, email)
             login(request,user)
             messages.success(request, "Has iniciado sesion!")
             return redirect('home')
@@ -185,7 +188,7 @@ def report_crime(request):
                 
                 form.instance.latitud = latitud
                 form.instance.longitud = longitud
-
+                mail_sender_registro_crime(request)
                 report_crime = form.save()
 
                 messages.success(request, "Crimen Reportado!")
@@ -211,6 +214,7 @@ def update_reported_crime(request, pk):
         form = AddReportForm(request.POST or None, instance=reported_crime)
         if form.is_valid():
             form.save()
+            mail_sender_reporte_actualizado(request)
             messages.success(request, "El reporte ha sido actualizado")
             return redirect('home_news')
         messages.error(request, "Verifica todos los datos")
@@ -224,6 +228,7 @@ def delete_reported_crime(request, pk):
     if request.user.is_authenticated:
         delete_it = crimeData.objects.get(id=pk)
         delete_it.delete()
+        mail_sender_reporte_eliminado(request)
         messages.success(request, "Reporte Eliminado")
         return redirect('home_news')
     else:
@@ -291,6 +296,29 @@ def map_specific_crime(request, pk):
         messages.success(request, "Debes Iniciar Sesion!")
         return redirect('home_news')
 
+
+def draw_text_with_line_breaks(c, text, x, y, max_width, font_size):
+    lines = []
+    current_line = ""
+    current_width = 0
+
+    for word in text.split():
+        word_width = c.stringWidth(word, "Helvetica", font_size)
+        if current_width + word_width < max_width:
+            current_line += word + " "
+            current_width += word_width
+        else:
+            lines.append(current_line.strip())
+            current_line = word + " "
+            current_width = word_width
+
+    lines.append(current_line.strip())
+
+    for line in reversed(lines):
+        c.drawString(x, y, line)
+        y -= c._leading
+
+
 def generate_pdf_specific_report(request, pk):
     if request.user.is_authenticated:
         specific_crime = crimeData.objects.get(id=pk)
@@ -344,9 +372,18 @@ def generate_pdf_specific_report(request, pk):
         c.setFont("Helvetica-Bold", 18)
         c.drawString(5*cm, 5.5*cm, 'DETALLES DEL INCIDENTE')
         c.setFont("Helvetica-Bold", 14)
+        
+
+        # Lugar del incidente
         c.drawString(0* cm, 8 * cm, 'Lugar del incidente: ')
         c.setFont("Helvetica", 14)
-        c.drawString(5* cm, 9 * cm, f'{specific_crime.direccion}')
+        max_width = 400  # Ajusta el ancho máximo permitido
+        x_position = 5 * cm
+        y_position = 10 * cm
+        direccion_text = specific_crime.direccion
+        draw_text_with_line_breaks(c, direccion_text, x_position, y_position, max_width, 14)
+
+
         c.setFont("Helvetica-Bold", 14)
         c.drawString(0* cm, 11 * cm, 'Fecha del incidente:  ')
         c.setFont("Helvetica", 14)
@@ -358,7 +395,7 @@ def generate_pdf_specific_report(request, pk):
         c.setFont("Helvetica-Bold", 14)
         c.drawString(0* cm, 17 * cm, 'Colonia del incidente:  ')
         c.setFont("Helvetica", 14)
-        c.drawString(5* cm, 16 * cm, f'{specific_crime.colonia_hecho}')
+        c.drawString(5* cm, 18 * cm, f'{specific_crime.colonia_hecho}')
 
 
         #Pie de pagina
@@ -383,8 +420,35 @@ def generate_pdf_specific_report(request, pk):
         return FileResponse(buf, as_attachment=True, filename=f'CRIMEN-REPORTADO-{pk}.pdf')
     
 
-def mail_Sender(request):
-    subject = "OSCAAAAAAAAAAAAAAAAAAAAR"
-    message = "NO MAMES YA SE ENVIAN VLTV del mensaje"
-    recipient_list = ["diegomartinez13272@gmail.com"]
+def mail_sender_registro_user(username, email):
+    subject = f'BIENVENIDO A CRIME-CDMX {username}'
+    message = "GRACIAS A TI PODREMOS HACER DE LA CIUDAD DE MÉXICO UN LUGAR MAS SEGURO!"
+    recipient_list = [f'{email}']
     send_mail(subject, message, EMAIL_HOST_USER, recipient_list, fail_silently=True)
+
+def mail_sender_registro_crime(request):
+    if request.user.is_authenticated:
+        username = request.user.username
+        email = request.user.email
+        subject = f'CRIMEN REPORTADO - CRIME-CDMX'
+        message = f"{username}: !GRACIAS A TI PODREMOS HACER DE LA CIUDAD DE MÉXICO UN LUGAR MAS SEGURO!"
+        recipient_list = [f'{email}']
+        send_mail(subject, message, EMAIL_HOST_USER, recipient_list, fail_silently=True)
+    
+def mail_sender_reporte_actualizado(request):
+    if request.user.is_authenticated:
+        username = request.user.username
+        email = request.user.email
+        subject = f'REPORTE DE CRIMEN ACTUALIZADO - CRIME-CDMX'
+        message = f"{username}: SE HAN ACTUALIZADO LOS DATOS DE TU REPORTE, ESPERAMOS SIGAS AYUDÁNDONOS A HACER MÁS SEGURA LA CIUDAD DE MÉXICO"
+        recipient_list = [f'{email}']
+        send_mail(subject, message, EMAIL_HOST_USER, recipient_list, fail_silently=True)
+    
+def mail_sender_reporte_eliminado(request):
+    if request.user.is_authenticated:
+        username = request.user.username
+        email = request.user.email
+        subject = f'REPORTE DE CRIMEN ELIMINADO - CRIME-CDMX'
+        message = f"{username}: SE HA ELIMINADO TU REPORTE, ESPERAMOS SIGAS AYUDÁNDONOS A HACER MÁS SEGURA LA CIUDAD DE MÉXICO"
+        recipient_list = [f'{email}']
+        send_mail(subject, message, EMAIL_HOST_USER, recipient_list, fail_silently=True)

@@ -17,7 +17,7 @@ urlpatterns = [
     path('see_reported_crime/<int:pk>', views.see_reported_crime, name="see_reported_crime"),
     path('generate_pdf_specific_report/<int:pk>', views.generate_pdf_specific_report, name="generate_pdf_specific_report"),
 
-    path('mail_Sender/', views.mail_Sender, name="mail_Sender"),
+    # path('mail_sender_registro_user/', views.mail_sender_registro_user, name="mail_sender_registro_user"),
 
 
 
