@@ -6,6 +6,9 @@ from django.contrib import messages
 from .forms import SignUpForm, AddReportForm
 from .models import crimeData
 from django.core.paginator import Paginator
+from sklearn.cluster import KMeans
+import numpy as np
+
 
 from django.http import JsonResponse
 
@@ -242,7 +245,35 @@ def see_reported_crime(request, pk):
     else:
         messages.success(request, "Debes Iniciar Sesion!")
         return redirect('home_news')      
-    
+
+
+def FastMarkerCluster_(data, num_clusters, max_iters=100):
+    """
+    Parámetros:
+    - data: Un array de numpy que contiene las coordenadas de los puntos.
+    - num_clusters: El número de clusters a formar.
+    - max_iters: Número máximo de iteraciones.
+
+    Retorna:
+    - labels: Las etiquetas de cluster asignadas a cada punto de datos.
+    - centroids: Las coordenadas de los centroides de los clusters.
+    """
+    centroids = data[np.random.choice(data.shape[0], num_clusters, replace=False)]
+
+    for _ in range(max_iters):
+        distances = np.linalg.norm(data[:, np.newaxis, :] - centroids, axis=2)
+
+        labels = np.argmin(distances, axis=1)
+
+        new_centroids = np.array([data[labels == i].mean(axis=0) for i in range(num_clusters)])
+
+        if np.all(centroids == new_centroids):
+            break
+
+        centroids = new_centroids
+
+    return labels, centroids
+
 def map_specific_crime(request, pk):
     if request.user.is_authenticated:
         specific_crime = crimeData.objects.get(id=pk)
