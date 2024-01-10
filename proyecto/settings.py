@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'drf_spectacular',
     'website',
+    # 'website.utils'
 ]
 
 MIDDLEWARE = [
@@ -84,7 +85,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'p_web',
         'USER': 'root',
-        'PASSWORD': '!Mart!Dieg!23',
+        'PASSWORD': '951753',
         'HOST': 'localhost',
         'PORT': '3306',
     }
@@ -147,3 +148,13 @@ REST_FRAMEWORK = {
 }
 
 GOOGLE_API_KEY = 'AIzaSyB1o8tEeqHFhM7o8BtumM-cnqIwt5MvAuc'
+
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'noreplypruebpr@gmail.com'  # Reemplaza con tu dirección de correo electrónico
+EMAIL_HOST_PASSWORD = 'wdqa pmwo tqlg jrpg'
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False

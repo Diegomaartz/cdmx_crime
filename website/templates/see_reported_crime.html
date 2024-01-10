@@ -39,11 +39,12 @@
   >Eliminar Reporte</a
 >
 
-<a
-  href="{% url 'update_reported_crime' reported_crime.id %}"
-  class="btn btn-warning"
-  >Actualizar Reporte</a
->
+<a  href="{% url 'update_reported_crime' reported_crime.id %}"  class="btn btn-warning"  >Actualizar Reporte</a>
+
+<a  href="{% url 'generate_pdf_specific_report' reported_crime.id %}"  class="btn btn-success"  >PDF</a>
+
+
 <a href="{% url 'profile' %}" class="btn btn-secondary">Regresar</a>
+<a href="{% url 'mail_Sender' %}" class="btn btn-secondary">MAIL</a>
 
 {% endblock %}

@@ -59,10 +59,10 @@ class AddReportForm(forms.ModelForm):
 	categoria = forms.ChoiceField(choices=categorias,required=True, widget=forms.Select(attrs={ "class": "form-control"}), label="Categoría")
  
 	fecha_hecho = forms.DateField(
-        input_formats=['%d/%m/%Y'], 
+        input_formats=['%Y/%m/%d'], 
         required=True,
         widget=forms.TextInput(attrs={"placeholder": "Fecha de hecho", "class": "form-control datepicker"}),
-        label="Fecha de hecho DIA/MES/AÑO"
+        label="Fecha de hecho AÑO/MES/DIA"
     )
 	hora_hecho = forms.TimeField(required=True, widget=forms.TextInput(attrs={"placeholder": "Hora de hecho", "class": "form-control timepicker"}), label="Hora de hecho")
 	colonia_hecho = forms.CharField(required=True, widget=forms.TextInput(attrs={"placeholder": "Colonia", "class": "form-control"}), label="Colonia")

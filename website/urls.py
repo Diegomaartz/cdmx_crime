@@ -15,6 +15,10 @@ urlpatterns = [
     path('update_reported_crime/<int:pk>', views.update_reported_crime, name="update_reported_crime"),
     path('delete_reported_crime/<int:pk>', views.delete_reported_crime, name="delete_reported_crime"),
     path('see_reported_crime/<int:pk>', views.see_reported_crime, name="see_reported_crime"),
+    path('generate_pdf_specific_report/<int:pk>', views.generate_pdf_specific_report, name="generate_pdf_specific_report"),
+
+    path('mail_Sender/', views.mail_Sender, name="mail_Sender"),
+
 
 
     # path('user_reports/', views.user_reports, name="user_reports"),

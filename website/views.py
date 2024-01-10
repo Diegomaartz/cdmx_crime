@@ -9,10 +9,23 @@ from django.core.paginator import Paginator
 
 from django.http import JsonResponse
 
+from django.http import FileResponse
+import io
+from reportlab.pdfgen import canvas
+from reportlab.lib.units import cm 
+from reportlab.lib.pagesizes import letter
+from reportlab.lib.utils import ImageReader
+
 
 import googlemaps
 import json
 from django.conf import settings
+from proyecto.settings import EMAIL_HOST_USER
+
+
+
+from django.core.mail import send_mail
+from django.core.mail import EmailMessage
 
 # import leafmap
 
@@ -200,6 +213,7 @@ def update_reported_crime(request, pk):
             form.save()
             messages.success(request, "El reporte ha sido actualizado")
             return redirect('home_news')
+        messages.error(request, "Verifica todos los datos")
         return render(request, 'update_reported_crime.html', {'form':form})
 
     else:
@@ -224,23 +238,12 @@ def see_reported_crime(request, pk):
         messages.success(request, "Debes Iniciar Sesion!")
         return redirect('home_news')      
     
-    
-    
-# def profile(request):
-#     if request.user.is_authenticated:
-#         username = request.user.username
-#         user_reported_crimes = crimeData.objects.filter(user_report=username).values()
-#         return render(request, 'profile.html', {'user_reported_crimes': user_reported_crimes})
-#     else:
-#         messages.success(request, "Debes Iniciar Sesion!")
-#         return redirect('home_news')
-
 def map_specific_crime(request, pk):
     if request.user.is_authenticated:
         specific_crime = crimeData.objects.get(id=pk)
         crimes = crimeData.objects.all()
 
-        print(crimes)
+        # print(crimes)
 
         crime_data_list = [
             {'latitud': crimespot.latitud.replace(',', '.'),   #0
@@ -287,3 +290,101 @@ def map_specific_crime(request, pk):
     else:
         messages.success(request, "Debes Iniciar Sesion!")
         return redirect('home_news')
+
+def generate_pdf_specific_report(request, pk):
+    if request.user.is_authenticated:
+        specific_crime = crimeData.objects.get(id=pk)
+   
+        buf = io.BytesIO()
+        c = canvas.Canvas(buf, pagesize=letter, bottomup=0)
+
+        c.saveState()
+        c.scale(1,-1)
+        image_path = 'website/static/logo_r.png'
+        image = ImageReader(image_path)
+
+        c.drawImage(image, 15, -55, width=75, height=50)
+        c.restoreState()
+
+        # c.save()
+
+        #Propiedades
+        c.translate(cm, cm)
+        c.setFont("Helvetica", 14)
+        c.setStrokeColorRGB(1, 0, 0)  
+        c.setLineWidth(2) 
+        c.setFillColorRGB(0, 0, 0) 
+
+        #Marca de agua
+        c.rotate(45)  
+        c.setFillColorCMYK(0, 0, 0, 0.08)  
+        c.setFont("Helvetica", 100) 
+        c.drawString(5 * cm, 5 * cm, "CDMX-CRIME") 
+        c.rotate(-45) 
+        
+        #Encabezado
+        from datetime import date
+        c.setFillColorRGB(0, 0, 0) 
+        dt = date.today().strftime('%Y/%b/%d')
+        c.setFillColorRGB(1, 0, 0)
+
+        c.setFont("Helvetica-Bold", 20)
+        c.drawString(4*cm, 0.5*cm, 'REPORTE DE CRIMEN - CRIME CDMX ')
+        c.setFillColorRGB(0, 0, 0) 
+        c.setFont("Helvetica-Bold", 14)
+
+        c.drawString(11*cm, 2*cm, f'ID REPORTE:   {specific_crime.id}')
+        c.drawString(0, 2*cm, f'Usuario: {specific_crime.user_report}')
+        c.setFont("Helvetica", 14)
+        c.drawString(11 * cm, 3 * cm, f'Emision del reporte: {dt}')
+        c.drawString(0, 3*cm, f'Delito:   {specific_crime.delito}')
+
+        #Cuerpo PDF
+        
+        c.setFont("Helvetica-Bold", 18)
+        c.drawString(5*cm, 5.5*cm, 'DETALLES DEL INCIDENTE')
+        c.setFont("Helvetica-Bold", 14)
+        c.drawString(0* cm, 8 * cm, 'Lugar del incidente: ')
+        c.setFont("Helvetica", 14)
+        c.drawString(5* cm, 9 * cm, f'{specific_crime.direccion}')
+        c.setFont("Helvetica-Bold", 14)
+        c.drawString(0* cm, 11 * cm, 'Fecha del incidente:  ')
+        c.setFont("Helvetica", 14)
+        c.drawString(5* cm, 12 * cm, f'{specific_crime.fecha_hecho}')
+        c.setFont("Helvetica-Bold", 14)
+        c.drawString(0* cm, 14 * cm, 'Alcaldia del incidente:  ')
+        c.setFont("Helvetica", 14)
+        c.drawString(5* cm, 15 * cm, f'{specific_crime.alcaldia_hecho}')
+        c.setFont("Helvetica-Bold", 14)
+        c.drawString(0* cm, 17 * cm, 'Colonia del incidente:  ')
+        c.setFont("Helvetica", 14)
+        c.drawString(5* cm, 16 * cm, f'{specific_crime.colonia_hecho}')
+
+
+        #Pie de pagina
+        c.setFillColorRGB(0.5, 0.5, 0.5) 
+        c.setFont("Helvetica-Bold", 16)
+        c.drawString(7*cm, 26*cm, 'CRIME CDMX - ESCOM')
+
+
+
+        #Lineas
+        
+        c.line(0, 4 * cm, 19.5 * cm, 4 * cm)
+        c.line(0, 24 * cm, 19.5 * cm, 24 * cm)
+               
+        c.setFillColorRGB(0, 0, 1)
+        c.setFont("Helvetica", 16)
+        c.showPage()
+        c.save()
+        
+        buf.seek(0)
+        
+        return FileResponse(buf, as_attachment=True, filename=f'CRIMEN-REPORTADO-{pk}.pdf')
+    
+
+def mail_Sender(request):
+    subject = "OSCAAAAAAAAAAAAAAAAAAAAR"
+    message = "NO MAMES YA SE ENVIAN VLTV del mensaje"
+    recipient_list = ["diegomartinez13272@gmail.com"]
+    send_mail(subject, message, EMAIL_HOST_USER, recipient_list, fail_silently=True)
