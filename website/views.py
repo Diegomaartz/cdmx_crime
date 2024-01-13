@@ -3,8 +3,8 @@ from folium.plugins import FastMarkerCluster
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
-from .forms import SignUpForm, AddReportForm
-from .models import crimeData
+from .forms import SignUpForm, AddReportForm, ProfilePicForm
+from .models import crimeData, User, Profile
 from django.core.paginator import Paginator
 from sklearn.cluster import KMeans
 import numpy as np
@@ -483,3 +483,23 @@ def mail_sender_reporte_eliminado(request):
         message = f"{username}: SE HA ELIMINADO TU REPORTE, ESPERAMOS SIGAS AYUDÁNDONOS A HACER MÁS SEGURA LA CIUDAD DE MÉXICO"
         recipient_list = [f'{email}']
         send_mail(subject, message, EMAIL_HOST_USER, recipient_list, fail_silently=True)
+
+
+def update_user_profile(request):
+    if request.user.is_authenticated:
+        current_user = User.objects.get(id=request.user.id)
+        # profile_user = Profile.objects.get(user__id=request.user.id)
+        user_form = SignUpForm(request.POST or None, instance = current_user)
+        profile_form = ProfilePicForm(request.POST or None, request.FILES or None)
+        # if user_form.is_valid() and profile_form.is_valid():
+        if profile_form.is_valid():
+            # user_form.save()
+            profile_form.save()
+            login(request, current_user)
+            messages.success(request, "Usuario Actualizado")
+            return redirect('home_news')      
+        # return render(request, "update_user_profile.html", {"user_form" : user_form, "profile_form": profile_form})
+        return render(request, "update_user_profile.html", {"profile_form": profile_form})
+    else:
+        messages.success(request, "Debes Iniciar Sesion!")
+        return redirect('home_news')         
