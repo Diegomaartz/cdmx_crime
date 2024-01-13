@@ -1,6 +1,20 @@
 <h1>This repository is a personal project that I've developed over <em>3 months</em>.</h1>
 <p>It really helped me understand <strong>Django</strong> and the <strong>MVC design pattern</strong>.</p>
 
+
+<h1>Crime Reporting WebApp</h1>
+<p>The main objective of the project was to develop a web application for reporting crimes in <em>CDMX</em>. The webapp provides features such as creating an account, generating PDFs of crime reports, and managing reports through editing or deleting functionalities.</p>
+<p>Additionally, the application integrates the <strong>Google Maps API</strong> to visualize the details of reported crimes. Users can explore specific information about each report, including the category of the incident, a brief description, the date it happened, and the time.</p>
+
+<h2>Project Setup</h2>
+<ul>
+    <li><strong>proyecto:</strong> Main project directory.</li>
+    <li><strong>website:</strong> Main application of the project.</li>
+    <li><strong>media:</strong> Directory for storing media files.</li>
+    <li><strong>static:</strong> Directory for static files such as CSS, JavaScript, and images.</li>
+</ul>
+
+
 <h2>Project Setup</h2>
 <ul>
     <li><strong>proyecto:</strong> Main project directory.</li>
