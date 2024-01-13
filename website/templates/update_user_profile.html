@@ -15,7 +15,8 @@
   <h1>ACTUALIZAR PERFIL</h1>
   <br/>
 
-  <form method="POST" action="" class="custom-form">
+  {% comment %} <form method="POST" action="" class="custom-form"> {% endcomment %}
+  <form method="POST" action="" enctype="multipart/form-data">
     {% csrf_token %}
     
 

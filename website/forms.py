@@ -5,6 +5,15 @@ from .models import crimeData, Profile
 
 from django.conf import settings
 
+
+class ProfilePicForm(forms.ModelForm):
+	# profile_image = forms.ImageField(label= "Actualizar Foto de Perfil")
+
+	class Meta:
+		model = Profile
+		fields = ('image', )
+
+
 class SignUpForm(UserCreationForm):
 	email = forms.EmailField(label="", widget=forms.TextInput(attrs={'class':' text-dark 	form-control ', 'placeholder':'Email Address'}))
 	first_name = forms.CharField(label="", max_length=100, widget=forms.TextInput(attrs={'class':'form-control text-dark', 'placeholder':'First Name'}))
@@ -94,9 +103,3 @@ class AddReportForm(forms.ModelForm):
 		exclude = ('anio_hecho', 'latitud', 'longitud')
 
 
-class ProfilePicForm(forms.ModelForm):
-	profile_image = forms.ImageField(label= "Actualizar Foto de Perfil")
-
-	class Meta:
-		model = Profile
-		fields = ('profile_image', )
