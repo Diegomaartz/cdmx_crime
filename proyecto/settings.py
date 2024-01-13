@@ -20,7 +20,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-y4bf*m&e9rv$&m=cb+e*avu3d!9ps@gu$2w&o&76!dbg4tptra'
+SECRET_KEY = ''
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -83,11 +83,11 @@ WSGI_APPLICATION = 'proyecto.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'p_web',
-        'USER': 'root',
-        'PASSWORD': '!Mart!Dieg!23',
-        'HOST': 'localhost',
-        'PORT': '3306',
+        'NAME': '',
+        'USER': '',
+        'PASSWORD': '',
+        'HOST': '',
+        'PORT': '',
     }
 }
 
@@ -147,14 +147,14 @@ REST_FRAMEWORK = {
     ),
 }
 
-GOOGLE_API_KEY = 'AIzaSyB1o8tEeqHFhM7o8BtumM-cnqIwt5MvAuc'
+GOOGLE_API_KEY = ''
 
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'noreplypruebpr@gmail.com'  # Reemplaza con tu dirección de correo electrónico
-EMAIL_HOST_PASSWORD = 'wdqa pmwo tqlg jrpg'
+EMAIL_HOST_USER = ''  # Reemplaza con tu dirección de correo electrónico
+EMAIL_HOST_PASSWORD = ''
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
